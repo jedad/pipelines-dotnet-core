@@ -20,13 +20,22 @@ steps:
     echo Add other tasks to build, test, and deploy your project.
     echo See https://aka.ms/yaml
   displayName: 'Run a multi-line script'
-
+# Build project
 - task: DotNetCoreCLI@2
   displayName: 'BUILD BY TASK: dotnet build $(buildConfiguration).bytask'
   inputs:
     command: 'build'
-    
-- script: dotnet build --configuration $(buildConfiguration)
-  displayName: 'BUILD BY SCRIPT: dotnet build $(buildConfiguration)kbyscript'
-# Build project
+ # alternative:   
+#- script: dotnet build --configuration $(buildConfiguration)
+# Publish projects to specified folder.
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet publish'
+  inputs:
+    command: 'publish'
+    publishWebProjects: false
+    projects: '**/*.csproj'
+    arguments: '-o $(Build.ArtifactStagingDirectory)/Output'
+    zipAfterPublish: true
+    modifyOutputPath: true
+
 
