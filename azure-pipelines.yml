@@ -43,7 +43,8 @@ steps:
   inputs: 
     command: 'pack'
     outputDir: '$(Build.ArtifactStagingDirectory)/TestDir'
-# Publish projects to specified folder.
+
+# Publish projects to specified folder
 - task: DotNetCoreCLI@2
   displayName: 'dotnet publish'
   inputs:
@@ -53,5 +54,8 @@ steps:
     arguments: '-o $(Build.ArtifactStagingDirectory)/Output'
     zipAfterPublish: true
     modifyOutputPath: true
-
+    # Run tests and auto publish test results.
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'test'
 
