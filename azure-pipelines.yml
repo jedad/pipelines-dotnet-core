@@ -22,4 +22,9 @@ steps:
   displayName: 'Run a multi-line script'
 
 - script: dotnet build --configuration $(buildConfiguration)
-  displayName: 'dotnet build $(buildConfiguration)'
+  displayName: 'BUILD BY SCRIPT: dotnet build $(buildConfiguration)kbyscript'
+# Build project
+- task: DotNetCoreCLI@2
+  displayName: 'BUILD BY TASK: dotnet build $(buildConfiguration).bytask'
+  inputs:
+    command: 'build'
