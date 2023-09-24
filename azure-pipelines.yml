@@ -20,6 +20,16 @@ steps:
     echo Add other tasks to build, test, and deploy your project.
     echo See https://aka.ms/yaml
   displayName: 'Run a multi-line script'
+ 
+  #Restore packages with the .NET Core CLI task
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet restore'
+  inputs:
+    command: 'restore'
+    #feedsToUse: 'select'
+    #feedRestore: 'projectName/feedName'
+    projects: '**/*.csproj'
+    includeNuGetOrg: true
 # Build project
 - task: DotNetCoreCLI@2
   displayName: 'BUILD BY TASK: dotnet build $(buildConfiguration)'
@@ -27,6 +37,17 @@ steps:
     command: 'build'
  # alternative:   
 #- script: dotnet build --configuration $(buildConfiguration)
+# Push non test NuGet packages from a build to internal organization Feed
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'push'
+    searchPatternPush: '$(Build.ArtifactStagingDirectory)/*.nupkg;!$(Build.ArtifactStagingDirectory)/*.Tests.nupkg'
+    feedPublish: 'AJFeed'
+    # Pack a NuGet package to a test directory
+- task: DotNetCoreCLI@2
+  inputs: 
+    command: 'pack'
+    outputDir: '$(Build.ArtifactStagingDirectory)/TestDir'
 # Publish projects to specified folder.
 - task: DotNetCoreCLI@2
   displayName: 'dotnet publish'
