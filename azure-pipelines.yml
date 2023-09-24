@@ -37,13 +37,8 @@ steps:
     command: 'build'
  # alternative:   
 #- script: dotnet build --configuration $(buildConfiguration)
-# Push non test NuGet packages from a build to internal organization Feed
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'push'
-    searchPatternPush: '$(Build.ArtifactStagingDirectory)/*.nupkg;!$(Build.ArtifactStagingDirectory)/*.Tests.nupkg'
-    feedPublish: 'AJFeed'
-    # Pack a NuGet package to a test directory
+
+# Pack a NuGet package to a test directory
 - task: DotNetCoreCLI@2
   inputs: 
     command: 'pack'
